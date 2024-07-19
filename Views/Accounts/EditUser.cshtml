@@ -1,0 +1,85 @@
+﻿@model EditorialUserInfo
+
+@{
+    ViewData["Title"] = "ユーザー編集";
+
+    var StudentUser = (StudentUser)ViewBag.TargetUser; // 操作対象のユーザー情報を取得する．
+    var isAdminUser = (bool)ViewBag.IsAdminUser; // ログイン中のユーザーが管理者ユーザーであるかどうかを取得する．
+
+    if (Model is null) throw new ArgumentNullException(nameof(Model)); // ad-hoc! 非null保証のための回避策
+}
+
+<form asp-action="EditUser">
+    <table>
+        <tr><th>項目</th><th>値</th></tr>
+
+        @* ユーザー名(Username)のための入力欄 *@
+        <tr>
+            <td><label asp-for="@Model.Username"></label></td>
+            <td><input asp-for="@Model.Username" /></td>
+        </tr>
+
+        @* 氏名（フルネーム）編集(Nickname)のための入力欄 *@
+        <tr>
+            <td><label asp-for="@Model.Nickname"></label></td>
+            <td><input asp-for="@Model.Nickname" /></td>
+        </tr>
+
+        @* メールアドレス(Email)のための入力欄 *@
+        <tr>
+            <td><label asp-for="@Model.Email"></label></td>
+            <td><input asp-for="@Model.Email" /></td>
+        </tr>
+
+        @* 現在のパスワード(CurrentPassoword)の入力欄(管理者ユーザーではないときのみ) *@
+        @if (!isAdminUser)
+        {
+            <tr>
+                <td><label asp-for="@Model.CurrentPassword"></label></td>
+                <td><input asp-for="@Model.CurrentPassword" /></td>
+            </tr>
+        }
+
+        @* 新しいパスワード(NewPassword)のための入力欄 *@
+        <tr>
+            <td><label asp-for="@Model.NewPassword"></label></td>
+            <td><input asp-for="@Model.NewPassword" /></td>
+        </tr>
+
+        @* 新しいパスワードの入力確認(NewPasswordConfirmation)のための入力欄 *@
+        <tr>
+            <td><label asp-for="@Model.NewPasswordConfirmation"></label></td>
+            <td><input asp-for="@Model.NewPasswordConfirmation" /></td>
+        </tr>
+    </table>
+
+    @* 管理者ユーザーの場合は「現在のパスワード」は入力させないので *@
+    @* 隠しパラメータとして埋め込む(値は必要ないが入力データとして存在している必要がある) *@
+    @if (isAdminUser)
+    {
+        <input type="hidden" asp-for="@Model.CurrentPassword" value="unused" />
+    }
+
+    <input type="submit" value="適用" />
+    <div asp-validation-summary="All"></div>
+</form>
+
+@if (ViewBag.ErrorMessages != null)
+{
+    var msgs = (IEnumerable<string>)ViewBag.ErrorMessages;
+    <ul>
+        @foreach (var msg in msgs)
+        {
+            <li>@msg</li>
+        }
+    </ul>
+}
+
+<a asp-action="UserDetails" asp-route-id="@StudentUser.UserName">詳細に戻る</a>
+
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,47 @@
+﻿@model IEnumerable<PronptModel_ver2.Models.Day>
+
+@{
+    ViewData["Title"] = "持ち物一覧";
+
+    var currentUser = (StudentUser?)ViewBag.CurrentUser; // アクションメソッドでチェックした
+    var isAdminUser = (bool)ViewBag.IsAdminUser;      // ユーザー関連の情報を
+    var isLoggedIn = (bool)ViewBag.IsLoggedIn;        // ViewBagから取り出す．
+
+    if (Model is null) throw new ArgumentNullException(nameof(Model)); // ad-hoc! 非null保証のための回避策
+}
+
+@foreach (var a in Model)
+{
+    <section class="day">
+
+        @* 記事の作成者の表示 *@
+        <p> @(a.StudentUser?.Nickname ?? a.StudentUser?.UserName) による投稿</p>
+
+                @* 記事の本文を表示(整形済みテキストとして表示) *@
+        <pre>@a.DayNo</pre>
+        <pre>@a.PersonaLeffects</pre>
+
+        @* 「編集」や「削除」のリンクを表示するかどうかの判定 *@
+        @*  (ログイン済みで，かつ管理者であるかログイン中のユーザーの作成した記事なら表示する) *@
+        @if (isLoggedIn && (isAdminUser || (currentUser != null && a.StudentUserId == currentUser.Id)))
+        {
+     
+            @* 記事の公開状態を表示 *@
+            <p>@Html.DisplayNameFor(_ => a.PublicationState)：@Html.DisplayFor(_ => a.PublicationState)</p>
+
+
+
+            @* 「編集」や「削除」のリンクを表示 *@
+            <p>
+                <a asp-action="Edit" asp-route-id="@a.Id">編集</a>
+                | <a asp-action="Delete" asp-route-id="@a.Id">削除</a>    
+            </p>
+        }
+    </section>
+}
+
+@* ログイン済みの場合は「新規作成」のリンクを表示 *@
+@if (isLoggedIn)
+{
+    <a asp-action="Create">新規作成</a>
+}

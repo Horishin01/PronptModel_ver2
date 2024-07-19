@@ -1,0 +1,47 @@
+﻿@model StudentUser
+
+@{
+    ViewData["Title"] = "ユーザー詳細";
+
+    if (Model is null) throw new ArgumentNullException(nameof(Model)); // ad-hoc! 非null保証のための回避策
+}
+
+<table>
+    <tr><th>項目</th><th>値</th></tr>
+
+    @* ユーザー名(Username)の表示 *@
+    <tr>
+        <td>@Html.DisplayNameFor(u => u.UserName)</td>
+        <td>@Html.DisplayFor(u => u.UserName)</td>
+    </tr>
+
+
+    @* 氏名（フルネーム）(Nickname)の表示 *@
+    <tr>
+        <td>@Html.DisplayNameFor(u => u.Nickname)</td>
+        <td>@Html.DisplayFor(u => u.Nickname)</td>
+    </tr>
+
+    @* ユーザー名(Sex)の表示 *@
+    <tr>
+        <td>@Html.DisplayNameFor(u => u.Sex)</td>
+        <td>@Html.DisplayFor(u => u.Sex)</td>
+    </tr>
+
+
+    @* メールアドレス(Email)の表示 *@
+    <tr>
+        <td>@Html.DisplayNameFor(u => u.Email)</td>
+        <td>@Html.DisplayFor(u => u.Email)</td>
+    </tr>
+
+    @* 登録日時(Registered)の表示 *@
+    <tr>
+        <td>@Html.DisplayNameFor(u => u.Registered)</td>
+        <td>@Html.DisplayFor(u => u.Registered)</td>
+    </tr>
+</table>
+
+<a asp-controller="Days" asp-action="Index">持ち物一覧</a>
+| <a asp-action="EditUser" asp-route-id="@Model.UserName">編集</a>
+| <a asp-action="DeleteUser" asp-route-id="@Model.UserName">退会(削除)</a>

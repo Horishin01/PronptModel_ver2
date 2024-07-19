@@ -1,0 +1,24 @@
+﻿@model StudentUser
+
+@{
+    ViewData["Title"] = "ユーザー削除";
+
+    var currentUser = (StudentUser)ViewBag.CurrentUser; // ログイン中のユーザー情報を取得する．
+    var isAdminUser = (bool)ViewBag.IsAdminUser;     // ログイン中のユーザーが管理者ユーザーであるかどうかを取得する．
+
+    if (Model is null) throw new ArgumentNullException(nameof(Model)); // ad-hoc! 非null保証のための回避策
+}
+
+<form asp-action="DeleteUser">
+    @if (currentUser.Id == Model.Id)
+    {
+        <p>アカウントを削除しますか？</p>
+        <p><strong>警告：アカウントを削除するとあなたの作成したすべての持ち物登録が失われます．</strong></p>
+    }
+    else
+    {
+        <p>ユーザー @Model.UserName を削除しますか？</p>
+    }
+    <input type="hidden" asp-for="@Model.UserName" />
+    <input type="submit" value="削除" />
+</form>

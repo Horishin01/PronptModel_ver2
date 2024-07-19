@@ -1,0 +1,40 @@
+﻿@model PronptModel_ver2.Models.Day
+
+@{
+    ViewData["Title"] = "記事編集";
+
+    if (Model is null) throw new ArgumentNullException(nameof(Model)); // ad-hoc! 非null保証のための回避策
+}
+
+<form asp-action="Edit">
+    @* タイトル(Title)のための入力欄*@
+    <label asp-for="@Model.DayNo"></label>：
+    <select asp-for="@Model.DayNo" asp-items="Html.GetEnumSelectList<DayName>()"></select>
+    <br />
+
+    @* 本文(Body)のための入力欄*@
+    <label asp-for="@Model.PersonaLeffects"></label>：<br />
+    <textarea asp-for="@Model.PersonaLeffects" rows="10" cols="70"></textarea>
+    <br />
+
+    @* 公開状態(PublicationState)のための入力欄*@
+    <label asp-for="@Model.PublicationState"></label>：
+    <select asp-for="@Model.PublicationState" asp-items="Html.GetEnumSelectList<PublicationStateType>()"></select>
+    <br />
+
+    @* その他の情報を隠しパラメータとして埋め込んでおく *@
+    <input type="hidden" asp-for="@Model.Id" />
+    <input type="hidden" asp-for="@Model.StudentUserId" />
+
+    <input type="submit" value="修正" />
+    <div asp-validation-summary="All"></div>
+</form>
+
+<a asp-action="Details" asp-route-id="@Model.Id">詳細に戻る</a>
+
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

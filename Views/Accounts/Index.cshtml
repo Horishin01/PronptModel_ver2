@@ -1,0 +1,17 @@
+﻿@model IEnumerable<StudentUser>
+
+@{
+    ViewData["Title"] = "ユーザー一覧";
+
+    if (Model is null) throw new ArgumentNullException(nameof(Model)); // ad-hoc! 非null保証のための回避策
+}
+
+@* ユーザー一覧をリストで表示 *@
+<ul>
+    @foreach (var user in Model)
+    {
+        <li><a asp-action="UserDetails" asp-route-id="@user.UserName">@user.UserName</a></li>
+    }
+</ul>
+
+<a asp-action="AddUser">新規ユーザー登録</a>

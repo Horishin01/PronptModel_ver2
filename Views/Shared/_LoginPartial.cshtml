@@ -1,0 +1,31 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@using PronptModel_ver2.Data;
+
+@inject SignInManager<StudentUser> signInManager;
+@inject UserManager<StudentUser> userManager;
+
+@{
+    var StudentUser = await userManager.GetUserAsync(User); // ログイン中のユーザー情報を取得する．
+}
+
+@if (signInManager.IsSignedIn(User) && StudentUser != null)
+{
+    <p>
+        @StudentUser.UserName としてログイン中(
+        <a asp-controller="Accounts" asp-action="UserDetails" asp-route-id="@StudentUser.UserName">ユーザー情報詳細</a>
+        @if (await userManager.IsInRoleAsync(StudentUser, IdentityDataSeeder.AdminRoleName))
+        {
+            <text>，</text>
+
+            <a asp-controller="Accounts" asp-action="Index">ユーザー一覧</a>
+        }
+        )
+    </p>
+    <form asp-controller="Accounts" asp-action="Logout">
+        <input type="submit" value="ログアウト" />
+    </form>
+}
+else
+{
+    <a asp-controller="Accounts" asp-action="Login">ログイン</a>
+}

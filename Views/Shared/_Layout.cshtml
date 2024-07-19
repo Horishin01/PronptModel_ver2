@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - T4a</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    @* ① ヘッダー *@
+    <header>
+        <h1>最終課題</h1>
+        <partial name="_LoginPartial" />
+    </header>
+
+    @* ② ナビゲーション *@
+    <nav>
+        @* いまのところは空にしておく *@
+    </nav>
+
+    @* ③ メインコンテンツ *@
+    <main>
+        <h2>@ViewData["Title"]</h2>
+        @RenderBody()
+    </main>
+
+    @* ④ フッター *@
+    <footer>
+        &copy; @DateTime.Today.Year - Iryo Taro
+    </footer>
+
+    @* そのほか *@
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>

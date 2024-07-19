@@ -1,0 +1,73 @@
+﻿@model NewUserInfo
+
+@{
+    ViewData["Title"] = "新規ユーザー登録";
+
+    if (Model is null) throw new ArgumentNullException(nameof(Model)); // ad-hoc! 非null保証のための回避策
+}
+
+<form asp-action="AddUser">
+    <table>
+        <tr><th>項目</th><th>値</th></tr>
+
+        @* ユーザー名(Username)のための入力欄 *@
+        <tr>
+            <td><label asp-for="@Model.Username"></label></td>
+            <td><input asp-for="@Model.Username" /></td>
+        </tr>
+
+        @* 氏名（フルネーム）編集(Nickname)のための入力欄 *@
+        <tr>
+            <td><label asp-for="@Model.Nickname"></label></td>
+            <td><input asp-for="@Model.Nickname" /></td>
+        </tr>
+
+
+        @* 性別(Sex) のための入力欄 *@
+        <tr>
+        <label asp-for="@Model.Sex"></label>:
+        <select asp-for="@Model.Sex" asp-items="Html.GetEnumSelectList<SexType>()"></select>
+        <span asp-validation-for="@Model.Sex"></span>
+        </tr>
+
+
+        @* メールアドレス(Email)のための入力欄 *@
+        <tr>
+            <td><label asp-for="@Model.Email"></label></td>
+            <td><input asp-for="@Model.Email" /></td>
+        </tr>
+
+        @* パスワード(Password)のための入力欄 *@
+        <tr>
+            <td><label asp-for="@Model.Password"></label></td>
+            <td> <input asp-for="@Model.Password" /></td>
+        </tr>
+
+        @* パスワードの入力確認(PasswordConfirmation)のための入力欄 *@
+        <tr>
+            <td><label asp-for="@Model.PasswordConfirmation"></label></td>
+            <td><input asp-for="@Model.PasswordConfirmation" /></td>
+        </tr>
+    </table>
+    <input type="submit" value="登録" />
+    <div asp-validation-summary="All"></div>
+</form>
+
+@* ログインにまつわるエラーメッセージを ul 要素で表示する *@
+@if (ViewBag.ErrorMessages != null)
+{
+    var msgs = (IEnumerable<string>)ViewBag.ErrorMessages;
+    <ul>
+        @foreach (var msg in msgs)
+        {
+            <li>@msg</li>
+        }
+    </ul>
+}
+
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

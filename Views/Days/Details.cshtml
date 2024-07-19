@@ -1,0 +1,35 @@
+﻿@model PronptModel_ver2.Models.Day
+
+@{
+    if (Model is null) throw new ArgumentNullException(nameof(Model)); // ad-hoc! 非null保証のための回避策
+
+    ViewData["Title"] = "Details";
+    var isModifiable = (bool)ViewBag.IsModifiable; // この記事をログイン中のユーザーが
+    // 修正できるかどうかをViewBagから取り出す．
+}
+
+@* 記事の作成者の表示 *@
+<p> @(Model.StudentUser?.Nickname ?? Model.StudentUser?.UserName) による投稿</p>
+
+<dl>
+    @* 曜日の表示 *@
+    <dt>@Html.DisplayNameFor(m => m.DayNo)</dt>
+    <dd>@Html.DisplayFor(m => m.DayNo)</dd>
+
+    @* 持ち物の表示 *@
+    <dt>@Html.DisplayNameFor(m => m.PersonaLeffects)</dt>
+    <dd>@Html.DisplayFor(m => m.PersonaLeffects)</dd>
+</dl>
+
+<a asp-action="Index">一覧に戻る</a>
+
+@if (isModifiable)
+{
+    <text>| </text>
+
+    <a asp-action="Edit" asp-route-id="@Model.Id">編集</a>   
+    
+    <text>| </text>
+
+    <a asp-action="Delete" asp-route-id="@Model.Id">削除</a>
+}

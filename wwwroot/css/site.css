@@ -1,0 +1,48 @@
+body {
+    padding: 1em;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid black;
+}
+
+th {
+    background: #404040;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+}
+
+section.day {
+    border: 1px solid lightgray;
+    border-radius: 10px;
+    background: #fafaff;
+    padding: 1em;
+    margin: 1em;
+}
+
+    section.day pre, pre.day {
+        min-width: 8em;
+        min-height: 6em;
+        border: 2px dotted lightgray;
+        background: white;
+        font-family: monospace;
+        padding: 1em;
+        font-size: large;
+    }
+
+input[type="text"][name="Title"] {
+    width: 30em;
+}
+
+.table th {
+    color: inherit;
+}
+
+img.rep {
+    max-width: 100%;
+}

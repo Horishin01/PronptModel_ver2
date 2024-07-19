@@ -1,0 +1,41 @@
+﻿@model LoginUserInfo
+
+@{
+    ViewData["Title"] = "ユーザーログイン";
+
+    if (Model is null) throw new ArgumentNullException(nameof(Model)); // ad-hoc! 非null保証のための回避策
+}
+
+<form asp-action="Login">
+    @* ユーザー名(Username)のための入力欄 *@
+    <label asp-for="@Model.Username"></label>：
+    <input asp-for="@Model.Username" />
+    <br />
+
+    @* パスワード(Password)のための入力欄 *@
+    <label asp-for="@Model.Password"></label>：
+    <input asp-for="@Model.Password" />
+    <br />
+
+    <input type="submit" value="ログイン" />
+    <div asp-validation-summary="All"></div> @* エラーは集約表示する *@
+</form>
+
+@* ログインにまつわるエラーメッセージを ul 要素で表示する *@
+@if (ViewBag.ErrorMessages != null)
+{
+    var msgs = (IEnumerable<string>)ViewBag.ErrorMessages;
+    <ul>
+        @foreach (var msg in msgs)
+        {
+            <li>@msg</li>
+        }
+    </ul>
+}
+
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}   
