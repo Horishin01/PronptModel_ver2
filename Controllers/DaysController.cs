@@ -171,21 +171,32 @@ namespace PronptModel_ver2.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,DayNo,PersonaLeffects,PublicationState,StudentUserId")] Day day)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,DayNo,PersonaLeffects,PublicationState")] Day day)
         {
             if (id != day.Id)
             {
                 return NotFound();
             }
+
+            var original = await _context.Days.FindAsync(id);
+            if (original == null)
+            {
+                return NotFound();
+            }
+
             // ログイン中のユーザー情報を取得して編集可能かどうかを調べる．
             StudentUser? currentUser = await _userManager.GetUserAsync(User);
-            if (!await IsModifiableAsync(currentUser, day)) return Forbid();
+            if (!await IsModifiableAsync(currentUser, original)) return Forbid();
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(day);
+                    original.DayNo = day.DayNo;
+                    original.PersonaLeffects = day.PersonaLeffects;
+                    original.PublicationState = day.PublicationState;
+
+                    _context.Update(original);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -199,7 +210,7 @@ namespace PronptModel_ver2.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Details), new { id = day.Id }); // 編集が成功したら Details アクションに戻す
+                return RedirectToAction(nameof(Details), new { id = original.Id }); // 編集が成功したら Details アクションに戻す
             }
             // ViewData["BlogUserId"] = new SelectList(_context.Users, "Id", "Id", article.BlogUserId); // ←削除
             return View(day);
